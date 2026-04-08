@@ -1,0 +1,53 @@
+books:
+  Apology:
+    file: "Apology.txt"
+    speakers: ["Socrates"]
+    format: "monologue_prose"
+
+  Crito:
+    file: "Crito.txt"
+    speakers: ["Socrates", "Crito"]
+    format: "dialogue_prose"
+
+  Euthyphro:
+    file: "Euthyphro.txt"
+    speakers: ["Socrates", "Euthyphro"]
+    format: "dialogue_labeled"
+
+  Charmides:
+    file: "Charmides, Laches, Lysis.txt"
+    speakers: ["Socrates", "Charmides", "Critias", "Chaerephon"]
+    format: "dialogue_prose"
+    section: "Charmides"
+
+  Laches:
+    file: "Charmides, Laches, Lysis.txt"
+    speakers: ["Socrates", "Laches", "Nicias", "Lysimachus", "Melesias"]
+    format: "dialogue_prose"
+    section: "Laches"
+
+  Lysis:
+    file: "Charmides, Laches, Lysis.txt"
+    speakers: ["Socrates", "Lysis", "Menexenus", "Hippothales"]
+    format: "dialogue_prose"
+    section: "Lysis"
+
+  Meno:
+    file: "Meno.txt"
+    speakers: ["Socrates", "Meno", "Anytus", "Slave"]
+    format: "dialogue_labeled"
+
+  Phaedo:
+    file: "Phaedo.txt"
+    speakers: ["Socrates", "Phaedo", "Cebes", "Simmias", "Echecrates"]
+    format: "dialogue_labeled"
+
+  Symposium:
+    file: "Symposium.txt"
+    speakers: ["Socrates", "Aristophanes", "Agathon", "Phaedrus", "Pausanias", "Eryximachus", "Alcibiades", "Apollodorus"]
+    format: "dialogue_prose"
+
+  Republic:
+    file: "Republic.txt"
+    speakers: ["Socrates", "Glaucon", "Adeimantus", "Thrasymachus", "Polemarchus", "Cephalus"]
+    format: "dialogue_prose"
