@@ -1,0 +1,24 @@
+paths:
+  books_dir: "Books"
+  vectorstore_dir: "vectorstore"
+  memory_dir: "memory"
+  logs_dir: "logs"
+
+chunking:
+  max_tokens: 800
+  min_tokens: 100
+  overlap_sentences: 2
+
+retrieval:
+  top_k_filtered: 10
+  top_k_unfiltered: 5
+  final_top_k: 5
+
+embedding:
+  model: "all-MiniLM-L6-v2"
+
+llm:
+  theme_model: "claude-haiku-4-5-20251001"
+  agent_model: "claude-sonnet-4-6"
+
+collection_name: "socrates_dialogues"
