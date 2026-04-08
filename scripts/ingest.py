@@ -136,29 +136,49 @@ def chunk_prose_by_paragraph(text: str, book: str, settings: dict) -> list[Chunk
     return chunks
 
 
+def build_speaker_pattern(speakers: list[str]) -> str:
+    """
+    Build regex that matches both full names (Socrates.) and abbreviations (Soc.).
+    Abbreviations: first 3-4 chars of name, case-insensitive.
+    """
+    alts = []
+    for s in speakers:
+        alts.append(re.escape(s))
+        # Add common abbreviations: first 3-4 characters
+        if len(s) > 3:
+            alts.append(re.escape(s[:4]))
+        if len(s) > 4:
+            alts.append(re.escape(s[:3]))
+    # Deduplicate, longest first to avoid partial matches
+    alts = sorted(set(alts), key=len, reverse=True)
+    return r'(?:^|\n)\s{0,6}(' + '|'.join(alts) + r')\.\s+'
+
+
+def normalize_speaker(abbrev: str, speakers: list[str]) -> str:
+    """Map an abbreviation back to the full speaker name."""
+    abbrev_lower = abbrev.lower()
+    for s in speakers:
+        if s.lower().startswith(abbrev_lower) or abbrev_lower.startswith(s[:3].lower()):
+            return s
+    return abbrev.capitalize()
+
+
 def chunk_labeled_dialogue(text: str, book: str, speakers: list[str], settings: dict) -> list[Chunk]:
     """
-    Parse dialogue with 'Speaker. text' or 'Speaker:' labeled turns.
+    Parse dialogue with 'Speaker. text' or 'Abbrev. text' labeled turns.
     Groups turns into chunks of 300-800 tokens.
     """
     max_tokens = settings["chunking"]["max_tokens"]
     min_tokens = settings["chunking"]["min_tokens"]
     overlap_sents = settings["chunking"]["overlap_sentences"]
 
-    # Build pattern for speaker labels
-    # Matches: "  Socrates. " or "  Meno. " at start of a line (with optional leading whitespace)
-    speaker_pattern = r'(?:^|\n)\s{0,4}(' + '|'.join(re.escape(s) for s in speakers) + r')\.\s+'
+    speaker_pattern = build_speaker_pattern(speakers)
 
     turns = []
-    pos = 0
     for m in re.finditer(speaker_pattern, text, re.IGNORECASE):
-        if pos < m.start():
-            # text before first speaker — skip (preamble)
-            pass
-        speaker = m.group(1).capitalize()
+        speaker = normalize_speaker(m.group(1), speakers)
         content_start = m.end()
         turns.append((speaker, content_start, m.start()))
-        pos = m.end()
 
     if not turns:
         # Fallback to prose chunking
