@@ -1,0 +1,63 @@
+themes:
+  courage:
+    primary: ["Laches"]
+    secondary: ["Republic", "Apology"]
+  piety:
+    primary: ["Euthyphro"]
+    secondary: ["Apology"]
+  love:
+    primary: ["Symposium"]
+    secondary: ["Phaedo", "Republic"]
+  beauty:
+    primary: ["Symposium"]
+    secondary: ["Republic"]
+  knowledge:
+    primary: ["Meno"]
+    secondary: ["Republic", "Charmides"]
+  death:
+    primary: ["Phaedo"]
+    secondary: ["Apology", "Crito"]
+  soul:
+    primary: ["Phaedo"]
+    secondary: ["Apology", "Republic"]
+  justice:
+    primary: ["Republic"]
+    secondary: ["Crito", "Apology"]
+  good:
+    primary: ["Republic"]
+    secondary: ["Meno", "Euthyphro"]
+  virtue:
+    primary: ["Meno"]
+    secondary: ["Laches", "Charmides"]
+  temperance:
+    primary: ["Charmides"]
+    secondary: ["Republic"]
+  friendship:
+    primary: ["Lysis"]
+    secondary: ["Symposium"]
+  education:
+    primary: ["Republic"]
+    secondary: ["Meno"]
+  rhetoric:
+    primary: ["Apology"]
+    secondary: ["Meno"]
+  truth:
+    primary: ["Republic"]
+    secondary: ["Apology", "Meno"]
+
+keywords:
+  courage: ["brave", "courage", "coward", "fear", "bold", "daring", "reckless"]
+  piety: ["god", "holy", "pious", "impious", "divine", "sacred", "reverence", "pray"]
+  love: ["love", "lover", "eros", "desire", "beloved", "passion"]
+  beauty: ["beautiful", "beauty", "fair", "lovely", "aesthetic"]
+  knowledge: ["know", "knowledge", "ignorance", "wisdom", "understanding", "believe", "opinion"]
+  death: ["death", "die", "dying", "dead", "mortality", "afterlife", "underworld"]
+  soul: ["soul", "psyche", "immortal", "spirit", "inner"]
+  justice: ["just", "justice", "unjust", "right", "wrong", "fair", "unfair"]
+  good: ["good", "evil", "virtue", "benefit", "harm", "happiness", "eudaimonia"]
+  virtue: ["virtue", "virtuous", "excellence", "arete", "character"]
+  temperance: ["temperate", "temperance", "moderation", "self-control", "sober"]
+  friendship: ["friend", "friendship", "philia", "companion", "loyal"]
+  education: ["teach", "teaching", "learn", "education", "teacher", "student", "training"]
+  rhetoric: ["rhetoric", "speech", "persuade", "persuasion", "orator", "words"]
+  truth: ["truth", "true", "false", "lie", "reality", "appearance"]
