@@ -3,3 +3,4 @@ sentence-transformers>=2.2
 pyyaml
 anthropic
 rank-bm25>=0.2
+gradio>=4.44

@@ -1,3 +1,16 @@
+---
+title: Socrates Agent
+emoji: 🏛️
+colorFrom: indigo
+colorTo: yellow
+sdk: gradio
+sdk_version: 4.44.0
+app_file: app.py
+pinned: false
+license: mit
+short_description: Reason with Socrates, grounded in Plato's dialogues.
+---
+
 # Socrates Agent
 
 A retrieval-augmented conversational agent that reasons as Socrates of Athens,
