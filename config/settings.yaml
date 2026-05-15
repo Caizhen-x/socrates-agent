@@ -15,10 +15,14 @@ retrieval:
   final_top_k: 5
 
 embedding:
-  model: "all-MiniLM-L6-v2"
+  model: "all-mpnet-base-v2"
 
 llm:
   theme_model: "claude-haiku-4-5-20251001"
+  digest_model: "claude-haiku-4-5-20251001"
   agent_model: "claude-sonnet-4-6"
 
 collection_name: "socrates_dialogues"
+
+prompt_budget:
+  system_max_tokens: 4800   # warn if system prompt exceeds this (logged to prompt_stats.jsonl)

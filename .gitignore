@@ -1,0 +1,13 @@
+.DS_Store
+*.Rhistory
+.Rdata
+__pycache__/
+*.pyc
+.env
+
+# Regenerable / personal — not for the public repo
+vectorstore/
+data/vectorstore/
+data/indexes/
+logs/
+memory/

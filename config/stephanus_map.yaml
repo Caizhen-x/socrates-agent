@@ -1,0 +1,116 @@
+# Stephanus page ranges for each Platonic dialogue.
+# Used to compute approximate textual location of retrieved chunks.
+# Format: start/end are Stephanus references (e.g. "80d")
+# References follow the standard Stephanus (1578) pagination.
+#
+# NOTE: These are approximate locations. The Gutenberg texts do not
+# contain Stephanus markers, so references are interpolated from
+# chunk position within the file. Treat as "~80d", not exact.
+
+Apology:
+  start: "17a"
+  end: "42a"
+
+Crito:
+  start: "43a"
+  end: "54e"
+
+Euthyphro:
+  start: "2a"
+  end: "16a"
+
+Charmides:
+  start: "153a"
+  end: "176d"
+
+Laches:
+  start: "178a"
+  end: "201c"
+
+Lysis:
+  start: "203a"
+  end: "223b"
+
+Meno:
+  start: "70a"
+  end: "100b"
+
+Phaedo:
+  start: "57a"
+  end: "118a"
+
+Symposium:
+  start: "172a"
+  end: "223d"
+
+Republic:
+  start: "327a"
+  end: "621d"
+
+Gorgias:
+  start: "447a"
+  end: "527e"
+
+Protagoras:
+  start: "309a"
+  end: "362a"
+
+Phaedrus:
+  start: "227a"
+  end: "279c"
+
+Theaetetus:
+  start: "142a"
+  end: "210d"
+
+Sophist:
+  start: "216a"
+  end: "268d"
+
+Statesman:
+  start: "257a"
+  end: "311c"
+
+Philebus:
+  start: "11a"
+  end: "67b"
+
+Timaeus:
+  start: "17a"
+  end: "92c"
+
+Critias:
+  start: "106a"
+  end: "121c"
+
+Parmenides:
+  start: "126a"
+  end: "166c"
+
+Ion:
+  start: "530a"
+  end: "542b"
+
+Euthydemus:
+  start: "271a"
+  end: "307c"
+
+Cratylus:
+  start: "383a"
+  end: "440e"
+
+Alcibiades I:
+  start: "103a"
+  end: "135e"
+
+Alcibiades II:
+  start: "138a"
+  end: "151c"
+
+Menexenus:
+  start: "234a"
+  end: "249e"
+
+Hippias Minor:
+  start: "363a"
+  end: "376c"

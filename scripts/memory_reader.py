@@ -14,7 +14,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 MEMORY_DIR = PROJECT_ROOT / "memory"
 SESSIONS_DIR = MEMORY_DIR / "sessions"
 SUMMARY_PATH = MEMORY_DIR / "summary.yaml"
-MAX_CONTEXT_TOKENS = 500
+MAX_CONTEXT_TOKENS = 800
 
 
 def load_summary() -> dict | None:
@@ -53,9 +53,9 @@ def format_summary(summary: dict) -> str:
         soph = profile.get("sophistication")
         if soph:
             lines.append(f"The interlocutor's level: {soph}.")
-        errors = profile.get("recurring_errors", [])
-        if errors:
-            lines.append("Recurring errors to watch for: " + "; ".join(errors) + ".")
+        tendencies = profile.get("tendencies", [])
+        if tendencies:
+            lines.append("Tendencies observed: " + "; ".join(tendencies) + ".")
         growth = profile.get("growth_areas", [])
         if growth:
             lines.append("Areas of growth noted: " + "; ".join(growth) + ".")
@@ -73,21 +73,58 @@ def format_session(session: dict) -> str:
             lines.append(f"Last explored ({date}): {topic}.")
 
     positions = session.get("positions_taken", [])
-    if positions:
+    grounded_positions = [
+        p for p in positions
+        if isinstance(p, dict) and (
+            # New sessions: grounded by chunk_ids
+            (p.get("support_chunk_ids") or [])
+            # Old sessions: grounded by free-text Stephanus ref (backward compat)
+            or (p.get("grounding") or "").strip()
+        )
+    ]
+    if grounded_positions:
         lines.append("Key points established:")
-        for pos in positions[:3]:
+        for pos in grounded_positions[:3]:
             claim = pos.get("claim", "")
             grounding = pos.get("grounding", "")
             if claim:
-                entry = f"  - {claim}"
-                if grounding:
-                    entry += f" (cf. {grounding})"
+                entry = f"  - {claim} (cf. {grounding})"
                 lines.append(entry)
 
     state = session.get("dialectical_state", "")
     conclusion = session.get("conclusion_if_any", "")
     if state:
         lines.append(f"Where we ended: {state}." + (f" {conclusion}" if conclusion else ""))
+
+    definitions = session.get("definitions_examined", []) or []
+    if definitions:
+        lines.append("Definitions examined:")
+        for d in definitions[:3]:
+            term = d.get("term", "")
+            defn = d.get("proposed_definition", "")
+            status = d.get("status", "")
+            reason = d.get("refutation_reason", "")
+            if term and defn:
+                entry = f"  - {term}: '{defn}' ({status})"
+                if reason:
+                    entry += f" — {reason}"
+                lines.append(entry)
+
+    concessions = session.get("concessions_extracted", []) or []
+    if concessions:
+        lines.append("Points already agreed upon:")
+        for c in concessions[:3]:
+            if c:
+                lines.append(f"  - {c}")
+
+    contradictions = session.get("contradictions_found", []) or []
+    if contradictions:
+        lines.append("Contradictions found:")
+        for ct in contradictions[:2]:
+            premises = ct.get("premises", [])
+            conclusion_ct = ct.get("conclusion", "")
+            if conclusion_ct:
+                lines.append(f"  - {conclusion_ct}")
 
     return "\n".join(lines)
 
@@ -113,7 +150,18 @@ def load_context() -> str:
             parts.append(s)
 
     parts.append("=== END MEMORY ===")
-    return "\n".join(parts)
+    context = "\n".join(parts)
+    # Enforce token limit (rough estimate: 4 chars ≈ 1 token)
+    max_chars = MAX_CONTEXT_TOKENS * 4
+    if len(context) > max_chars:
+        truncated = context[:max_chars]
+        # Cut at the last complete line to avoid mid-sentence breaks
+        last_newline = truncated.rfind("\n")
+        if last_newline > max_chars // 2:
+            context = truncated[:last_newline] + "\n[Memory truncated]"
+        else:
+            context = truncated + "\n[Memory truncated]"
+    return context
 
 
 if __name__ == "__main__":

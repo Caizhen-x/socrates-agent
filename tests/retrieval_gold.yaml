@@ -1,0 +1,191 @@
+# Retrieval evaluation gold set
+# Each entry: question, expected_books (at least one must appear in top-5), expected_substrings (optional)
+#
+# expected_books: books that MUST appear in retrieved results to count as a hit
+# expected_substrings: text fragments that should appear in at least one retrieved passage
+
+# ── Core virtue questions ──────────────────────────────────────────────────
+
+- question: "What is courage?"
+  expected_books: ["Laches"]
+  expected_substrings: ["endurance"]
+
+- question: "What is piety?"
+  expected_books: ["Euthyphro"]
+  expected_substrings: []
+
+- question: "What is temperance or self-control?"
+  expected_books: ["Charmides"]
+  expected_substrings: []
+
+- question: "Can virtue be taught?"
+  expected_books: ["Meno"]
+  expected_substrings: []
+
+- question: "What is virtue?"
+  expected_books: ["Meno"]
+  expected_substrings: []
+
+# ── Justice and law ────────────────────────────────────────────────────────
+
+- question: "What is justice?"
+  expected_books: ["Republic"]
+  expected_substrings: []
+
+- question: "Is it right to break an unjust law?"
+  expected_books: ["Crito"]
+  expected_substrings: []
+
+- question: "Is justice the interest of the stronger?"
+  expected_books: ["Republic"]
+  expected_substrings: ["stronger"]
+
+- question: "What does Thrasymachus say about justice?"
+  expected_books: ["Republic"]
+  expected_substrings: ["Thrasymachus"]
+  speaker_query: true
+
+# ── Soul and death ─────────────────────────────────────────────────────────
+
+- question: "What happens to the soul after death?"
+  expected_books: ["Phaedo"]
+  expected_substrings: []
+
+- question: "Is the soul immortal?"
+  expected_books: ["Phaedo"]
+  expected_substrings: []
+
+- question: "What is the soul?"
+  expected_books: ["Phaedo", "Republic"]
+  expected_substrings: []
+
+# ── Love and beauty ────────────────────────────────────────────────────────
+
+- question: "What is love?"
+  expected_books: ["Symposium"]
+  expected_substrings: []
+
+- question: "What is beauty?"
+  expected_books: ["Symposium"]
+  expected_substrings: []
+
+- question: "What is the ladder of beauty?"
+  expected_books: ["Symposium"]
+  expected_substrings: []
+
+# ── Knowledge and truth ────────────────────────────────────────────────────
+
+- question: "What is knowledge?"
+  expected_books: ["Theaetetus", "Meno"]
+  expected_substrings: []
+
+- question: "What is the difference between knowledge and opinion?"
+  expected_books: ["Meno", "Theaetetus"]
+  expected_substrings: []
+
+- question: "Can we know anything with certainty?"
+  expected_books: ["Theaetetus"]
+  expected_substrings: []
+
+# ── Rhetoric and sophistry ─────────────────────────────────────────────────
+
+- question: "What is rhetoric?"
+  expected_books: ["Gorgias", "Phaedrus"]
+  expected_substrings: []
+
+- question: "What does Callicles argue about power and justice?"
+  expected_books: ["Gorgias"]
+  expected_substrings: ["Callicles"]
+  speaker_query: true
+
+- question: "Is rhetoric a genuine art or mere flattery?"
+  expected_books: ["Gorgias"]
+  expected_substrings: []
+
+# ── Specific arguments and allegories ─────────────────────────────────────
+
+- question: "What is the allegory of the cave?"
+  expected_books: ["Republic"]
+  expected_substrings: ["cave"]
+
+- question: "What is the allegory of the chariot and the soul?"
+  expected_books: ["Phaedrus"]
+  expected_substrings: []
+
+- question: "What is the myth of Er?"
+  expected_books: ["Republic"]
+  expected_substrings: []
+
+- question: "What is the theory of recollection?"
+  expected_books: ["Meno", "Phaedo"]
+  expected_substrings: []
+
+# ── Speaker-specific ───────────────────────────────────────────────────────
+
+- question: "What does Glaucon say about the ring of Gyges?"
+  expected_books: ["Republic"]
+  expected_substrings: ["Glaucon", "Gyges"]
+  speaker_query: true
+
+- question: "What does Diotima teach about love?"
+  expected_books: ["Symposium"]
+  expected_substrings: ["Diotima"]
+  speaker_query: true
+
+- question: "What does Alcibiades say about Socrates?"
+  expected_books: ["Symposium"]
+  expected_substrings: ["Alcibiades"]
+  speaker_query: true
+
+# ── Friendship ────────────────────────────────────────────────────────────
+
+- question: "What is friendship?"
+  expected_books: ["Lysis"]
+  expected_substrings: []
+
+# ── Additional entity-specific ────────────────────────────────────────────
+
+- question: "What does Protagoras argue about virtue?"
+  expected_books: ["Protagoras"]
+  expected_substrings: ["Protagoras"]
+  speaker_query: true
+
+- question: "What does Aristophanes say about love?"
+  expected_books: ["Symposium"]
+  expected_substrings: ["Aristophanes"]
+  speaker_query: true
+
+- question: "What does Euthyphro say about piety?"
+  expected_books: ["Euthyphro"]
+  expected_substrings: ["Euthyphro"]
+  speaker_query: true
+
+- question: "What does Meno ask about virtue?"
+  expected_books: ["Meno"]
+  expected_substrings: ["Meno"]
+  speaker_query: true
+
+- question: "What does Crito say about escaping prison?"
+  expected_books: ["Crito"]
+  expected_substrings: ["Crito"]
+  speaker_query: true
+
+# ── False-positive entity guards ─────────────────────────────────────────
+
+- question: "Er, what is justice?"
+  expected_books: ["Republic", "Crito"]
+  expected_substrings: []
+
+- question: "Er, can virtue be taught?"
+  expected_books: ["Meno"]
+  expected_substrings: []
+
+# ── Multi-entity queries ─────────────────────────────────────────────────
+
+- question: "What do Meno and Protagoras say about virtue?"
+  expected_books: ["Meno", "Protagoras"]
+  expected_substrings: []
+
+- question: "How do Callicles and Gorgias differ on rhetoric?"
+  expected_books: ["Gorgias"]
+  expected_substrings: []

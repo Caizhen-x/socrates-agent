@@ -7,7 +7,7 @@ books:
   Crito:
     file: "Crito.txt"
     speakers: ["Socrates", "Crito"]
-    format: "dialogue_prose"
+    format: "dialogue_labeled"
 
   Euthyphro:
     file: "Euthyphro.txt"
@@ -15,22 +15,19 @@ books:
     format: "dialogue_labeled"
 
   Charmides:
-    file: "Charmides, Laches, Lysis.txt"
+    file: "Charmides.txt"
     speakers: ["Socrates", "Charmides", "Critias", "Chaerephon"]
-    format: "dialogue_prose"
-    section: "Charmides"
+    format: "dialogue_labeled"
 
   Laches:
-    file: "Charmides, Laches, Lysis.txt"
+    file: "Laches.txt"
     speakers: ["Socrates", "Laches", "Nicias", "Lysimachus", "Melesias"]
-    format: "dialogue_prose"
-    section: "Laches"
+    format: "dialogue_labeled"
 
   Lysis:
-    file: "Charmides, Laches, Lysis.txt"
-    speakers: ["Socrates", "Lysis", "Menexenus", "Hippothales"]
+    file: "Lysis.txt"
+    speakers: ["Socrates", "Lysis", "Menexenus", "Hippothales", "Ctesippus"]
     format: "dialogue_prose"
-    section: "Lysis"
 
   Meno:
     file: "Meno.txt"
@@ -51,3 +48,92 @@ books:
     file: "Republic.txt"
     speakers: ["Socrates", "Glaucon", "Adeimantus", "Thrasymachus", "Polemarchus", "Cephalus"]
     format: "dialogue_prose"
+
+  # --- Additional Platonic dialogues ---
+
+  Gorgias:
+    file: "Gorgias.txt"
+    speakers: ["Socrates", "Gorgias", "Callicles", "Polus", "Chaerephon"]
+    format: "dialogue_labeled"
+
+  Protagoras:
+    file: "Protagoras.txt"
+    speakers: ["Socrates", "Protagoras", "Hippocrates", "Alcibiades", "Callias"]
+    format: "dialogue_labeled"
+
+  Phaedrus:
+    file: "Phaedrus.txt"
+    speakers: ["Socrates", "Phaedrus"]
+    format: "dialogue_labeled"
+
+  Theaetetus:
+    file: "Theaetetus.txt"
+    speakers: ["Socrates", "Theaetetus", "Theodorus", "Euclid", "Terpsion"]
+    format: "dialogue_labeled"
+
+  Cratylus:
+    file: "Cratylus.txt"
+    speakers: ["Socrates", "Hermogenes", "Cratylus"]
+    format: "dialogue_labeled"
+
+  Sophist:
+    file: "Sophist.txt"
+    speakers: ["Socrates", "Theaetetus", "Theodorus"]
+    format: "dialogue_labeled"
+
+  Statesman:
+    file: "Statesman.txt"
+    speakers: ["Socrates", "Theodorus", "Theaetetus"]
+    format: "dialogue_labeled"
+
+  Philebus:
+    file: "Philebus.txt"
+    speakers: ["Socrates", "Protarchus", "Philebus"]
+    format: "dialogue_labeled"
+
+  Timaeus:
+    file: "Timaeus.txt"
+    speakers: ["Socrates", "Timaeus", "Critias", "Hermocrates"]
+    format: "dialogue_labeled"
+
+  Critias:
+    file: "Critias.txt"
+    speakers: ["Socrates", "Critias", "Timaeus", "Hermocrates"]
+    format: "dialogue_labeled"
+
+  Parmenides:
+    file: "Parmenides.txt"
+    speakers: ["Socrates", "Parmenides", "Zeno", "Aristoteles"]
+    format: "dialogue_labeled"
+
+  Ion:
+    file: "Ion.txt"
+    speakers: ["Socrates", "Ion"]
+    format: "dialogue_labeled"
+
+  # --- Books using all-caps "SPEAKER:" format (colon-labeled dialogue) ---
+
+  Euthydemus:
+    file: "Euthydemus.txt"
+    speakers: ["Socrates", "Euthydemus", "Dionysodorus", "Cleinias", "Crito"]
+    format: "dialogue_labeled_caps"
+
+  Alcibiades I:
+    file: "Alcibiades I.txt"
+    speakers: ["Socrates", "Alcibiades"]
+    format: "dialogue_labeled_caps"
+
+  Alcibiades II:
+    file: "Alcibiades II.txt"
+    speakers: ["Socrates", "Alcibiades"]
+    format: "dialogue_labeled_caps"
+
+  Menexenus:
+    file: "Menexenus.txt"
+    speakers: ["Socrates", "Menexenus"]
+    format: "dialogue_labeled_caps"
+
+  Hippias Minor:
+    file: "Hippias Minor.txt"
+    speakers: ["Socrates", "Hippias", "Eudicus"]
+    format: "dialogue_labeled_caps"

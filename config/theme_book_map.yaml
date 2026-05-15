@@ -1,49 +1,52 @@
 themes:
   courage:
     primary: ["Laches"]
-    secondary: ["Republic", "Apology"]
+    secondary: ["Republic", "Apology", "Protagoras"]
   piety:
     primary: ["Euthyphro"]
-    secondary: ["Apology"]
+    secondary: ["Apology", "Ion"]
   love:
-    primary: ["Symposium"]
-    secondary: ["Phaedo", "Republic"]
+    primary: ["Symposium", "Phaedrus"]
+    secondary: ["Phaedo", "Republic", "Alcibiades I"]
   beauty:
     primary: ["Symposium"]
-    secondary: ["Republic"]
+    secondary: ["Republic", "Phaedrus", "Ion", "Philebus"]
   knowledge:
-    primary: ["Meno"]
-    secondary: ["Republic", "Charmides"]
+    primary: ["Meno", "Theaetetus"]
+    secondary: ["Republic", "Charmides", "Protagoras", "Sophist"]
   death:
     primary: ["Phaedo"]
     secondary: ["Apology", "Crito"]
   soul:
-    primary: ["Phaedo"]
-    secondary: ["Apology", "Republic"]
+    primary: ["Phaedo", "Phaedrus"]
+    secondary: ["Apology", "Republic", "Alcibiades I"]
   justice:
-    primary: ["Republic"]
-    secondary: ["Crito", "Apology"]
+    primary: ["Republic", "Crito"]
+    secondary: ["Apology", "Gorgias", "Statesman"]
   good:
     primary: ["Republic"]
-    secondary: ["Meno", "Euthyphro"]
+    secondary: ["Meno", "Euthyphro", "Philebus", "Protagoras"]
   virtue:
     primary: ["Meno"]
-    secondary: ["Laches", "Charmides"]
+    secondary: ["Laches", "Charmides", "Protagoras", "Alcibiades I", "Euthydemus"]
   temperance:
     primary: ["Charmides"]
-    secondary: ["Republic"]
+    secondary: ["Republic", "Protagoras"]
   friendship:
     primary: ["Lysis"]
-    secondary: ["Symposium"]
+    secondary: ["Symposium", "Phaedrus"]
   education:
     primary: ["Republic"]
-    secondary: ["Meno"]
+    secondary: ["Meno", "Protagoras", "Theaetetus"]
   rhetoric:
-    primary: ["Apology"]
-    secondary: ["Meno"]
+    primary: ["Gorgias", "Apology"]
+    secondary: ["Phaedrus", "Menexenus"]
   truth:
     primary: ["Republic"]
-    secondary: ["Apology", "Meno"]
+    secondary: ["Apology", "Meno", "Theaetetus", "Sophist", "Cratylus"]
+  obedience:
+    primary: ["Crito"]
+    secondary: ["Republic", "Apology"]
 
 keywords:
   courage: ["brave", "courage", "coward", "fear", "bold", "daring", "reckless"]
@@ -53,7 +56,7 @@ keywords:
   knowledge: ["know", "knowledge", "ignorance", "wisdom", "understanding", "believe", "opinion"]
   death: ["death", "die", "dying", "dead", "mortality", "afterlife", "underworld"]
   soul: ["soul", "psyche", "immortal", "spirit", "inner"]
-  justice: ["just", "justice", "unjust", "right", "wrong", "fair", "unfair"]
+  justice: ["just", "justice", "unjust", "right", "wrong", "fair", "unfair", "law", "laws", "obey", "obedience", "disobey", "legal", "illegal", "injustice"]
   good: ["good", "evil", "virtue", "benefit", "harm", "happiness", "eudaimonia"]
   virtue: ["virtue", "virtuous", "excellence", "arete", "character"]
   temperance: ["temperate", "temperance", "moderation", "self-control", "sober"]
@@ -61,3 +64,4 @@ keywords:
   education: ["teach", "teaching", "learn", "education", "teacher", "student", "training"]
   rhetoric: ["rhetoric", "speech", "persuade", "persuasion", "orator", "words"]
   truth: ["truth", "true", "false", "lie", "reality", "appearance"]
+  obedience: ["obey", "obedience", "disobey", "disobedience", "escape", "flee", "prison", "break"]

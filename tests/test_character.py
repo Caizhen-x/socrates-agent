@@ -89,6 +89,7 @@ def run_character_tests():
                 print(f"  PASS")
             print(f"  Response preview: {response[:150]!r}")
         except Exception as e:
+            all_pass = False
             print(f"  ERROR: {e}")
         print()
 

@@ -28,7 +28,7 @@ def test_chunk_sizes():
 
         sizes = [estimate_tokens(c.text) for c in chunks]
         too_small = sum(1 for s in sizes if s < min_t)
-        too_large = sum(1 for s in sizes if s > max_t * 1.5)
+        too_large = sum(1 for s in sizes if s > max_t * 1.1)
         avg = sum(sizes) / len(sizes)
 
         status = "OK" if too_large == 0 else "WARN"
@@ -67,11 +67,13 @@ def test_republic_chunk_count():
 
 if __name__ == "__main__":
     print("=== test_ingest.py ===\n")
+    ok = True
     print("--- Chunk sizes ---")
-    test_chunk_sizes()
+    ok = test_chunk_sizes() and ok
     print()
     print("--- Chunk content ---")
-    test_chunk_content()
+    test_chunk_content()  # uses assert — raises AssertionError on failure
     print()
     print("--- Republic volume ---")
     test_republic_chunk_count()
+    sys.exit(0 if ok else 1)

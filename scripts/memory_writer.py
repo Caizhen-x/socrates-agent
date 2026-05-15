@@ -6,6 +6,7 @@ Usage: python scripts/memory_writer.py --transcript /tmp/socrates_transcript.jso
 
 import sys
 import json
+import os
 import yaml
 import argparse
 import datetime
@@ -13,6 +14,9 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.env_loader import load_env
+load_env(PROJECT_ROOT)
 
 MEMORY_DIR = PROJECT_ROOT / "memory"
 SESSIONS_DIR = MEMORY_DIR / "sessions"
@@ -33,7 +37,10 @@ interlocutor_inquiry:
 positions_taken:
   - claim: "<philosophical claim Socrates made>"
     grounding: "<textual reference if any, e.g. 'Laches 194e' or '' if none>"
+    support_chunk_ids: [<list of chunk_ids from AVAILABLE_CHUNKS lines that directly support this claim, or []>]
   # ... up to 4 positions
+  # IMPORTANT: only include chunk_ids that actually appear in the AVAILABLE_CHUNKS lines above.
+  # A position without any support_chunk_ids will be treated as ungrounded and not stored in memory.
 
 dialectical_state: "<one of: aporia, provisional_conclusion, refutation_complete, ongoing>"
 conclusion_if_any: "<brief description or empty string>"
@@ -44,6 +51,22 @@ interlocutor_profile:
   growth_areas: [<list of any improvements noted, or []>]
 
 ungrounded_claims: [<list of any claims Socrates made without textual grounding, or []>]
+
+definitions_examined:
+  - term: "<the concept being defined, e.g. 'courage'>"
+    proposed_definition: "<what the interlocutor proposed>"
+    status: "<one of: accepted, refuted, modified, abandoned>"
+    refutation_reason: "<brief reason if refuted, else empty string>"
+  # ... list all definitions proposed in this session, or []
+
+concessions_extracted:
+  - "<a statement the interlocutor explicitly agreed to>"
+  # ... up to 5 concessions, or []
+
+contradictions_found:
+  - premises: ["<premise 1>", "<premise 2>"]
+    conclusion: "<the contradiction or tension revealed>"
+  # ... up to 3, or []
 
 Return ONLY the YAML, no explanation, no markdown fences.
 
@@ -58,19 +81,69 @@ def get_session_id(date: str) -> str:
     return f"{date}_{seq:03d}"
 
 
+def _truncate_at_sentence(text: str, max_chars: int) -> str:
+    """Truncate text at the last sentence boundary before max_chars."""
+    if len(text) <= max_chars:
+        return text
+    truncated = text[:max_chars]
+    # Prefer sentence-ending punctuation as the cut point
+    for sep in (".\n", "?\n", "!\n", ". ", "? ", "! ", "\n", ".", "?", "!"):
+        idx = truncated.rfind(sep)
+        if idx > max_chars // 2:  # Don't cut away more than half
+            return truncated[: idx + len(sep)].rstrip()
+    return truncated
+
+
+def _normalize_digest(data: dict) -> dict:
+    """
+    Enforce the grounding contract: positions_taken entries with no textual
+    grounding reference are moved to ungrounded_claims so they can't be
+    baked into memory as grounded positions.
+    """
+    if not isinstance(data, dict):
+        return data
+
+    positions = data.get("positions_taken") or []
+    ungrounded = list(data.get("ungrounded_claims") or [])
+
+    grounded = []
+    for pos in positions:
+        if not isinstance(pos, dict):
+            continue
+        claim = (pos.get("claim") or "").strip()
+        if not claim:
+            continue
+        chunk_ids = pos.get("support_chunk_ids") or []
+        if isinstance(chunk_ids, list) and len(chunk_ids) > 0:
+            grounded.append(pos)
+        else:
+            # No chunk-level grounding — move to ungrounded_claims
+            if claim not in ungrounded:
+                ungrounded.append(claim)
+
+    data["positions_taken"] = grounded
+    data["ungrounded_claims"] = ungrounded
+    return data
+
+
 def generate_digest(transcript: list[dict], session_id: str, date: str, timestamp: str) -> dict:
     import anthropic
 
-    # Format transcript for the prompt
-    transcript_text = "\n".join(
-        f"{turn['role'].upper()}: {turn['content']}" for turn in transcript
-    )
+    # Format transcript for the prompt, including retrieved chunk_ids per user turn
+    lines = []
+    for turn in transcript:
+        lines.append(f"{turn['role'].upper()}: {turn['content']}")
+        if turn.get("passages"):
+            ids = [p["chunk_id"] for p in turn["passages"] if "chunk_id" in p]
+            if ids:
+                lines.append(f"  [AVAILABLE_CHUNKS: {', '.join(ids)}]")
+    transcript_text = "\n".join(lines)
 
     prompt = DIGEST_PROMPT.format(
         session_id=session_id,
         date=date,
         timestamp=timestamp,
-        transcript=transcript_text[:8000],  # Truncate very long sessions
+        transcript=_truncate_at_sentence(transcript_text, 8000),
     )
 
     client = anthropic.Anthropic()
@@ -78,7 +151,7 @@ def generate_digest(transcript: list[dict], session_id: str, date: str, timestam
         settings = yaml.safe_load(f)
 
     response = client.messages.create(
-        model=settings["llm"]["agent_model"],
+        model=settings["llm"].get("digest_model", settings["llm"]["theme_model"]),
         max_tokens=1000,
         messages=[{"role": "user", "content": prompt}],
     )
@@ -90,7 +163,7 @@ def generate_digest(transcript: list[dict], session_id: str, date: str, timestam
     if raw_yaml.endswith("```"):
         raw_yaml = "\n".join(raw_yaml.split("\n")[:-1])
 
-    return yaml.safe_load(raw_yaml)
+    return _normalize_digest(yaml.safe_load(raw_yaml))
 
 
 def update_summary(digest: dict):
@@ -112,14 +185,23 @@ def update_summary(digest: dict):
     new_profile = digest.get("interlocutor_profile", {})
     existing_profile = summary.get("interlocutor_profile", {})
 
-    if new_profile.get("sophistication"):
-        existing_profile["sophistication"] = new_profile["sophistication"]
+    # Weighted sophistication: majority vote over last 10 sessions
+    from collections import Counter
+    _VALID_SOPHISTICATION = {"beginner", "intermediate", "advanced"}
+    sophistication_history = existing_profile.get("sophistication_history", [])
+    new_soph = new_profile.get("sophistication", "")
+    if new_soph in _VALID_SOPHISTICATION:
+        sophistication_history.append(new_soph)
+        sophistication_history = sophistication_history[-10:]
+    existing_profile["sophistication_history"] = sophistication_history
+    if sophistication_history:
+        existing_profile["sophistication"] = Counter(sophistication_history).most_common(1)[0][0]
 
-    # Merge tendencies (keep unique, cap at 10)
-    existing_tendencies = existing_profile.get("recurring_errors", [])
+    # Merge tendencies (keep unique, cap at 10) — stored as "tendencies", not "recurring_errors"
+    existing_tendencies = existing_profile.get("tendencies", [])
     new_tendencies = new_profile.get("tendencies", [])
     merged = list(dict.fromkeys(existing_tendencies + new_tendencies))[:10]
-    existing_profile["recurring_errors"] = merged
+    existing_profile["tendencies"] = merged
 
     # Merge growth areas
     existing_growth = existing_profile.get("growth_areas", [])

@@ -4,6 +4,7 @@ Tries Claude Haiku API first; falls back to keyword index.
 """
 
 import os
+import re
 import sys
 import json
 import yaml
@@ -11,6 +12,9 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.env_loader import load_env
+load_env(PROJECT_ROOT)
 
 
 def load_config():
@@ -24,13 +28,13 @@ def load_config():
 THEMES = [
     "justice", "courage", "piety", "love", "knowledge", "death",
     "virtue", "temperance", "friendship", "truth", "beauty",
-    "soul", "good", "rhetoric", "education",
+    "soul", "good", "rhetoric", "education", "obedience",
 ]
 
 CLASSIFY_PROMPT = """Given this question: "{question}"
 Which 1-3 of these philosophical themes are most relevant?
 [justice, courage, piety, love, knowledge, death, virtue, temperance,
- friendship, truth, beauty, soul, good, rhetoric, education]
+ friendship, truth, beauty, soul, good, rhetoric, education, obedience]
 Return ONLY a JSON list of theme strings. Example: ["courage", "knowledge"]"""
 
 
@@ -53,11 +57,23 @@ def classify_via_api(question: str, model: str) -> list[str] | None:
         return None
 
 
+# Precompiled keyword patterns keyed by (theme, keyword) for word-boundary matching.
+# Built lazily on first classify_via_keywords call and reused thereafter.
+_keyword_patterns: dict[str, re.Pattern] = {}
+
+
+def _get_theme_pattern(theme: str, keywords: list[str]) -> re.Pattern:
+    if theme not in _keyword_patterns:
+        pattern = r'\b(?:' + '|'.join(re.escape(kw) for kw in keywords) + r')\b'
+        _keyword_patterns[theme] = re.compile(pattern, re.IGNORECASE)
+    return _keyword_patterns[theme]
+
+
 def classify_via_keywords(question: str, keyword_map: dict) -> list[str]:
-    question_lower = question.lower()
     scores = {}
     for theme, keywords in keyword_map.items():
-        count = sum(1 for kw in keywords if kw in question_lower)
+        pat = _get_theme_pattern(theme, keywords)
+        count = len(pat.findall(question))
         if count > 0:
             scores[theme] = count
     sorted_themes = sorted(scores, key=scores.get, reverse=True)
@@ -66,23 +82,29 @@ def classify_via_keywords(question: str, keyword_map: dict) -> list[str]:
 
 def classify(question: str) -> list[str]:
     settings, theme_map = load_config()
-    model = settings["llm"]["theme_model"]
 
-    themes = classify_via_api(question, model)
-    if themes:
-        return themes
+    # Skip API attempt when no key is configured OR when SOCRATES_SKIP_API is set.
+    # SOCRATES_SKIP_API lets eval/test scripts force keyword fallback even when
+    # .env populates ANTHROPIC_API_KEY at import time via env_loader.
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    skip_api = os.environ.get("SOCRATES_SKIP_API", "")
+    if api_key and not skip_api:
+        model = settings["llm"]["theme_model"]
+        themes = classify_via_api(question, model)
+        if themes:
+            return themes
 
-    # Fallback
     print("  [theme_classifier] Using keyword fallback.", file=sys.stderr)
     return classify_via_keywords(question, theme_map.get("keywords", {}))
 
 
 def themes_to_books(themes: list[str], theme_map: dict) -> list[str]:
-    """Return primary books for the given themes."""
+    """Return primary + secondary books for the given themes."""
     books = []
     for theme in themes:
-        if theme in theme_map.get("themes", {}):
-            books.extend(theme_map["themes"][theme].get("primary", []))
+        entry = theme_map.get("themes", {}).get(theme, {})
+        books.extend(entry.get("primary", []))
+        books.extend(entry.get("secondary", []))
     return list(dict.fromkeys(books))  # deduplicate, preserve order
 
 

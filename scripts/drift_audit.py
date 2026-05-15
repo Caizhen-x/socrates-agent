@@ -95,7 +95,7 @@ def run_audit() -> dict:
 
     client = anthropic.Anthropic()
     response = client.messages.create(
-        model=settings["llm"]["agent_model"],
+        model=settings["llm"].get("digest_model", settings["llm"]["theme_model"]),
         max_tokens=800,
         messages=[{"role": "user", "content": prompt}],
     )
