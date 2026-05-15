@@ -3,9 +3,7 @@
 .Rdata
 __pycache__/
 *.pyc
-.env
-.env.local
-.env.*.local
+.env*
 *.log
 
 # Regenerable / personal — not for the public repo
