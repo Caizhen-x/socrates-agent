@@ -1,8 +1,8 @@
 # Socrates Persona Agent — Technical Architecture Spec
 
-**Platform:** Claude Code on Mac mini (CPU-only, username `xiongcaizhen`)  
+**Platform:** Local Python development environment (CPU-only supported)
 **Stack:** Python, ChromaDB, Anthropic API, sentence-transformers  
-**Source texts:** 27 Platonic dialogues as `.txt` in `~/Desktop/Socrates/Books/`
+**Source texts:** 27 Platonic dialogues as `.txt` files in `Books/`
 
 ---
 
@@ -40,7 +40,7 @@ Model is configured in `config/settings.yaml` under `embedding.model` and can be
 - Supports metadata filtering (filter by book, speaker, section).
 - Persistent storage: survives across sessions without re-indexing.
 
-Store location: `~/Desktop/Socrates/vectorstore/`  
+Store location: `vectorstore/`
 **Current corpus:** 1085 chunks across all 27 Platonic dialogues. Rebuild with `python3 scripts/ingest.py`.
 
 ### Retrieval flow
@@ -244,7 +244,7 @@ Additionally, every 10 sessions, a **drift audit** runs: it feeds the summary ba
 ### File location
 
 ```
-~/Desktop/Socrates/memory/
+memory/
 ├── summary.yaml
 ├── sessions/
 │   ├── 2026-04-08_001.yaml   # includes definitions_examined, concessions_extracted, contradictions_found
@@ -258,7 +258,7 @@ Additionally, every 10 sessions, a **drift audit** runs: it feeds the summary ba
 ## 4. Project Folder Structure
 
 ```
-~/Desktop/Socrates/
+project root
 ├── CLAUDE.md                      # Agent identity, rules, protocol
 ├── .claude/
 │   ├── agents/
@@ -852,7 +852,7 @@ Fix path: add `about_entities: list[str]` metadata to Symposium's Alcibiades spe
 ### Step 1: Ingest the texts
 
 ```bash
-cd ~/Desktop/Socrates
+cd /path/to/socrates-agent
 mkdir -p vectorstore memory/sessions memory/drift_audits config scripts logs tests
 # Create config/settings.yaml with paths and parameters
 # Write and run: python scripts/ingest.py

@@ -150,7 +150,8 @@ def respond(user_message: str, history: list[dict]):
                 accumulated += chunk
                 yield accumulated
     except Exception as e:
-        yield accumulated + f"\n\n*[The connection to the agora has faltered: {e}]*"
+        print(f"[Anthropic stream failed: {type(e).__name__}: {e}]", file=sys.stderr)
+        yield accumulated + "\n\n*[The connection to the agora has faltered. Please try again shortly.]*"
         return
 
     response_text = accumulated.split("\n\n", 1)[1] if "\n\n" in accumulated else accumulated
@@ -177,7 +178,8 @@ def respond(user_message: str, history: list[dict]):
                 for chunk in stream.text_stream:
                     retry_accum += chunk
                     yield retry_accum
-        except Exception:
+        except Exception as e:
+            print(f"[Anthropic retry failed: {type(e).__name__}: {e}]", file=sys.stderr)
             pass
 
 

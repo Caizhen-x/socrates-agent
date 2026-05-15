@@ -41,8 +41,7 @@ pip install -r requirements.txt
 # One-time: cache the embedding model locally
 python scripts/download_model.py
 
-# Set your API key
-echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
+# Set your Anthropic API key in .env
 
 # One-time: build the vector store from Books/
 python scripts/ingest.py
